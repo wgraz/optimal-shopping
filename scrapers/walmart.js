@@ -3,9 +3,9 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 puppeteer.use(StealthPlugin());
 
-(async () => {
+async function scrapeWalmart(searchTerm) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     defaultViewport: { width: 1280, height: 800 },
   });
@@ -23,33 +23,51 @@ puppeteer.use(StealthPlugin());
       timeout: 60000,
     });
 
-    // Wait for the real selector
+    // Wait for the search input and type the term
     await page.waitForSelector('input[type="search"]', { timeout: 15000 });
 
-    const searchTerm = 'milk';
-
     console.log(`Typing search term: ${searchTerm}`);
+    await page.click('input[type="search"]', { clickCount: 3 }); // select existing text if any
     await page.type('input[type="search"]', searchTerm);
     await page.keyboard.press('Enter');
 
+    // Wait for navigation and results container
     await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
-
-    // Wait for results to load
     await page.waitForSelector('[data-item-id]', { timeout: 15000 });
 
-    const results = await page.evaluate(() => {
-      const items = Array.from(document.querySelectorAll('[data-item-id]')).slice(0, 5);
-      return items.map(item => {
-        const name = item.querySelector('a span')?.textContent?.trim();
-        const price = item.querySelector('span[class*="price"]')?.textContent?.trim();
-        return { name, price };
-      });
-    });
+    // Scrape top 5 results
+    // ... after waiting for results selector
+
+const results = await page.evaluate(() => {
+  const items = Array.from(document.querySelectorAll('[data-item-id]')).slice(0, 5);
+
+  return items.map(item => {
+    const name = item.querySelector('a span')?.textContent?.trim() || 'No name found';
+
+    // Find any span inside the item that contains text starting with "current price $"
+    let price = 'No price found';
+    const spans = item.querySelectorAll('span');
+    for (const span of spans) {
+      if (span.textContent && span.textContent.toLowerCase().startsWith('current price $')) {
+        const match = span.textContent.match(/\$\d+(\.\d{2})?/);
+        if (match) {
+          price = match[0];
+          break;
+        }
+      }
+    }
+
+    return { name, price };
+  });
+});
 
     console.log("Results:", results);
+
   } catch (err) {
     console.error('Scraping failed:', err);
   } finally {
     await browser.close();
   }
-})();
+}
+
+scrapeWalmart('milk');
