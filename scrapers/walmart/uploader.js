@@ -11,6 +11,16 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const scrapeWalmart = require('../walmart/scraper.js');
 
+// Helper function to generate keywords array from a product name string
+function generateKeywords(name) {
+  return name
+    .toLowerCase()
+    .split(/\s+/)               // split by whitespace
+    .map(word => word.replace(/[^a-z0-9]/g, ''))  // remove non-alphanumeric chars
+    .filter(word => word.length > 0);  // remove empty strings
+}
+
+
 // Sanitize a string to be a valid Firestore doc ID (no slashes, no special chars)
 function sanitizeId(str) {
   return str
@@ -68,13 +78,22 @@ async function uploadScrapedData(searchTerm, storeName, zipCode) {
       try {
         const productRef = doc(db, 'products', productId);
         const productSnap = await getDoc(productRef);
-        if (!productSnap.exists()) {
-          await setDoc(productRef, {
-            name: productName,
-            keywords: [productName.toLowerCase()],
-          });
-          console.log(`✅ Created product: ${productId}`);
-        }
+        const keywords = generateKeywords(productName);
+
+if (!productSnap.exists()) {
+  await setDoc(productRef, {
+    name: productName,
+    keywords: keywords,
+  });
+  console.log(`✅ Created product: ${productId} with keywords: ${keywords.join(', ')}`);
+} else {
+  // Optionally update keywords if you want to keep them fresh
+  await setDoc(productRef, {
+    keywords: keywords,
+  }, { merge: true });
+  console.log(`🔄 Updated keywords for product: ${productId} to: ${keywords.join(', ')}`);
+}
+
       } catch (err) {
         console.error(`Failed to create or get product ${productId}:`, err);
         continue;
