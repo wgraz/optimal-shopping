@@ -1,3 +1,7 @@
-2025/07/27-16:26:02.794 6558 Reusing MANIFEST C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Session Storage/MANIFEST-000001
-2025/07/27-16:26:02.795 6558 Recovering log #3
-2025/07/27-16:26:02.799 6558 Reusing old log C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Session Storage/000003.log 
+2025/07/27-17:26:21.277 1fa4 Reusing MANIFEST C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Session Storage/MANIFEST-000001
+2025/07/27-17:26:21.279 1fa4 Recovering log #3
+2025/07/27-17:26:21.279 1fa4 Level-0 table #3: started
+2025/07/27-17:26:21.286 1fa4 Level-0 table #3: 20960 bytes OK
+2025/07/27-17:26:21.286 1fa4 Recovering log #4
+2025/07/27-17:26:21.291 1fa4 Reusing old log C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Session Storage/000004.log 
+2025/07/27-17:26:21.295 1fa4 Delete type=0 #3

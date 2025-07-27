@@ -1,5 +1,5 @@
-2025/07/27-16:45:49.274 2044 Reusing MANIFEST C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Local Storage\leveldb/MANIFEST-000001
-2025/07/27-16:45:49.290 2044 Recovering log #8
-2025/07/27-16:45:49.293 2044 Reusing old log C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Local Storage\leveldb/000008.log 
-2025/07/27-16:46:13.106 2044 Level-0 table #11: started
-2025/07/27-16:46:13.146 2044 Level-0 table #11: 89450 bytes OK
+2025/07/27-17:27:53.306 5cf0 Reusing MANIFEST C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Local Storage\leveldb/MANIFEST-000001
+2025/07/27-17:27:53.310 5cf0 Recovering log #11
+2025/07/27-17:27:53.313 5cf0 Reusing old log C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart-user-data\Default\Local Storage\leveldb/000011.log 
+2025/07/27-17:28:08.202 650 Level-0 table #15: started
+2025/07/27-17:28:08.224 650 Level-0 table #15: 89387 bytes OK

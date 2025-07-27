@@ -22,7 +22,7 @@ async function autoScroll(page) {
   });
 }
 
-async function scrapeWalmart(searchTerm) {
+async function scrapeWalmart(searchTerm, zip) {
   const browser = await puppeteer.launch({
     headless: false,
     userDataDir: './walmart-user-data',
@@ -35,20 +35,8 @@ async function scrapeWalmart(searchTerm) {
   );
 
   try {
-    await page.goto('https://www.walmart.com/', { waitUntil: 'domcontentloaded' });
-
-    await page.waitForSelector('input[data-automation-id="header-input-search"]');
-    await page.focus('input[data-automation-id="header-input-search"]');
-    await page.click('input[data-automation-id="header-input-search"]', { clickCount: 3 });
-    await page.keyboard.press('Backspace');
-
-    for (const char of searchTerm) {
-      await page.keyboard.type(char);
-      await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 100));
-    }
-
-    await page.keyboard.press('Enter');
-    await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
+    const searchUrl = `https://www.walmart.com/search?q=${encodeURIComponent(searchTerm)}&zip=${zip}`;
+    await page.goto(searchUrl, { waitUntil: 'domcontentloaded' });
 
     console.log('Scrolling to load more products...');
     await autoScroll(page);
@@ -76,7 +64,7 @@ async function scrapeWalmart(searchTerm) {
       });
     });
 
-    console.log('Results:', results);
+    console.log(`Results for "${searchTerm}" in ${zip}:`, results);
   } catch (err) {
     console.error('Scraping failed:', err);
   } finally {
@@ -84,4 +72,5 @@ async function scrapeWalmart(searchTerm) {
   }
 }
 
-scrapeWalmart('milk');
+// Example usage
+scrapeWalmart('milk', '92707');
