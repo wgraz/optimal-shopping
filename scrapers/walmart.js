@@ -38,16 +38,25 @@ async function scrapeWalmart(searchTerm, zip) {
     const searchUrl = `https://www.walmart.com/search?q=${encodeURIComponent(searchTerm)}&zip=${zip}`;
     await page.goto(searchUrl, { waitUntil: 'domcontentloaded' });
 
-    console.log('Scrolling to load more products...');
+    console.log(`Please select your store manually now using ZIP code: ${zip}`);
+    console.log('After you have selected the store and page has updated, press ENTER here to continue scraping.');
+
+    // Wait for ENTER in terminal to continue scraping
+    await new Promise(resolve => {
+      process.stdin.once('data', () => {
+        resolve();
+      });
+    });
+
+    console.log('Starting to scroll and scrape products...');
+
     await autoScroll(page);
 
-    // Scrape all loaded products using robust price extraction
     const results = await page.evaluate(() => {
       const items = Array.from(document.querySelectorAll('[data-item-id]'));
       return items.map(item => {
         const name = item.querySelector('a span')?.textContent?.trim() || 'No name found';
 
-        // Price extraction logic that scans spans and looks for 'current price $'
         let price = 'No price found';
         const spans = item.querySelectorAll('span');
         for (const span of spans) {
@@ -64,7 +73,7 @@ async function scrapeWalmart(searchTerm, zip) {
       });
     });
 
-    console.log(`Results for "${searchTerm}" in ${zip}:`, results);
+    console.log(`Results for "${searchTerm}" in store for ZIP: ${zip}`, results);
   } catch (err) {
     console.error('Scraping failed:', err);
   } finally {
@@ -72,5 +81,5 @@ async function scrapeWalmart(searchTerm, zip) {
   }
 }
 
-// Example usage
-scrapeWalmart('milk', '92707');
+// Example usage:
+scrapeWalmart('milk', '11776');
