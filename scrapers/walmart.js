@@ -3,13 +3,31 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 puppeteer.use(StealthPlugin());
 
+async function autoScroll(page) {
+  await page.evaluate(async () => {
+    await new Promise((resolve) => {
+      let totalHeight = 0;
+      const distance = 100;
+      const timer = setInterval(() => {
+        const scrollHeight = document.body.scrollHeight;
+        window.scrollBy(0, distance);
+        totalHeight += distance;
+
+        if (totalHeight >= scrollHeight) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, 200);
+    });
+  });
+}
+
 async function scrapeWalmart(searchTerm) {
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    defaultViewport: { width: 1280, height: 800 },
+    headless: false,
+    userDataDir: './walmart-user-data',
+    args: ['--start-maximized'],
   });
-
   const page = await browser.newPage();
 
   await page.setUserAgent(
@@ -17,52 +35,48 @@ async function scrapeWalmart(searchTerm) {
   );
 
   try {
-    console.log("Navigating to Walmart...");
-    await page.goto('https://www.walmart.com/', {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000,
-    });
+    await page.goto('https://www.walmart.com/', { waitUntil: 'domcontentloaded' });
 
-    // Wait for the search input and type the term
-    await page.waitForSelector('input[type="search"]', { timeout: 15000 });
+    await page.waitForSelector('input[data-automation-id="header-input-search"]');
+    await page.focus('input[data-automation-id="header-input-search"]');
+    await page.click('input[data-automation-id="header-input-search"]', { clickCount: 3 });
+    await page.keyboard.press('Backspace');
 
-    console.log(`Typing search term: ${searchTerm}`);
-    await page.click('input[type="search"]', { clickCount: 3 }); // select existing text if any
-    await page.type('input[type="search"]', searchTerm);
-    await page.keyboard.press('Enter');
-
-    // Wait for navigation and results container
-    await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
-    await page.waitForSelector('[data-item-id]', { timeout: 15000 });
-
-    // Scrape top 5 results
-    // ... after waiting for results selector
-
-const results = await page.evaluate(() => {
-  const items = Array.from(document.querySelectorAll('[data-item-id]')).slice(0, 5);
-
-  return items.map(item => {
-    const name = item.querySelector('a span')?.textContent?.trim() || 'No name found';
-
-    // Find any span inside the item that contains text starting with "current price $"
-    let price = 'No price found';
-    const spans = item.querySelectorAll('span');
-    for (const span of spans) {
-      if (span.textContent && span.textContent.toLowerCase().startsWith('current price $')) {
-        const match = span.textContent.match(/\$\d+(\.\d{2})?/);
-        if (match) {
-          price = match[0];
-          break;
-        }
-      }
+    for (const char of searchTerm) {
+      await page.keyboard.type(char);
+      await new Promise(resolve => setTimeout(resolve, 100 + Math.random() * 100));
     }
 
-    return { name, price };
-  });
-});
+    await page.keyboard.press('Enter');
+    await page.waitForNavigation({ waitUntil: 'domcontentloaded' });
 
-    console.log("Results:", results);
+    console.log('Scrolling to load more products...');
+    await autoScroll(page);
 
+    // Scrape all loaded products using robust price extraction
+    const results = await page.evaluate(() => {
+      const items = Array.from(document.querySelectorAll('[data-item-id]'));
+      return items.map(item => {
+        const name = item.querySelector('a span')?.textContent?.trim() || 'No name found';
+
+        // Price extraction logic that scans spans and looks for 'current price $'
+        let price = 'No price found';
+        const spans = item.querySelectorAll('span');
+        for (const span of spans) {
+          if (span.textContent && span.textContent.toLowerCase().startsWith('current price $')) {
+            const match = span.textContent.match(/\$\d+(\.\d{2})?/);
+            if (match) {
+              price = match[0];
+              break;
+            }
+          }
+        }
+
+        return { name, price };
+      });
+    });
+
+    console.log('Results:', results);
   } catch (err) {
     console.error('Scraping failed:', err);
   } finally {
