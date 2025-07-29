@@ -1,5 +1,19 @@
-2025/07/27-19:38:01.733 6140 Reusing MANIFEST C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart\walmart-user-data\Default\Local Storage\leveldb/MANIFEST-000001
-2025/07/27-19:38:01.737 6140 Recovering log #33
-2025/07/27-19:38:01.741 6140 Reusing old log C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart\walmart-user-data\Default\Local Storage\leveldb/000033.log 
-2025/07/27-19:38:29.297 6904 Level-0 table #36: started
-2025/07/27-19:38:29.323 6904 Level-0 table #36: 89293 bytes OK
+2025/07/27-19:43:07.592 5f14 Reusing MANIFEST C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart\walmart-user-data\Default\Local Storage\leveldb/MANIFEST-000001
+2025/07/27-19:43:07.597 5f14 Recovering log #33
+2025/07/27-19:43:07.598 5f14 Level-0 table #35: started
+2025/07/27-19:43:07.604 5f14 Level-0 table #35: 89293 bytes OK
+2025/07/27-19:43:07.604 5f14 Recovering log #35
+2025/07/27-19:43:07.608 5f14 Reusing old log C:\Users\willj\OneDrive\Desktop\optimal-shopping\scrapers\walmart\walmart-user-data\Default\Local Storage\leveldb/000035.log 
+2025/07/27-19:43:07.611 5f14 Delete type=0 #33
+2025/07/27-19:43:07.611 5f14 Delete type=2 #36
+2025/07/27-19:43:07.613 4f80 Compacting 4@0 + 1@1 files
+2025/07/27-19:43:07.623 4f80 Generated table #36@0: 17 keys, 89509 bytes
+2025/07/27-19:43:07.623 4f80 Compacted 4@0 + 1@1 files => 89509 bytes
+2025/07/27-19:43:07.624 4f80 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/07/27-19:43:07.625 4f80 Delete type=2 #26
+2025/07/27-19:43:07.626 4f80 Delete type=2 #28
+2025/07/27-19:43:07.626 4f80 Delete type=2 #30
+2025/07/27-19:43:07.626 4f80 Delete type=2 #33
+2025/07/27-19:43:07.626 4f80 Delete type=2 #35
+2025/07/27-19:43:32.640 4f80 Level-0 table #38: started
+2025/07/27-19:43:32.675 4f80 Level-0 table #38: 89020 bytes OK
