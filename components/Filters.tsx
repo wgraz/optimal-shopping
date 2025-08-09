@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
 
-const dropdownClass = "border border-gray-300 rounded px-2 py-1 text-sm";
-
 export default function Filters() {
+  const dropdownClass =
+    "border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition";
+
   return (
-    <div className="flex flex-wrap gap-4">
-      {/* Online/In Person */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Shopping Mode</label>
+    <div className="w-full bg-white border border-gray-200 rounded-2xl shadow-sm p-4 flex flex-wrap gap-6">
+      {/* Shopping Mode */}
+      <div className="flex flex-col">
+        <label className="text-xs font-semibold text-gray-600 mb-1">
+          Shopping Mode
+        </label>
         <select className={dropdownClass}>
           <option>Online</option>
           <option>In Person</option>
@@ -16,8 +19,10 @@ export default function Filters() {
       </div>
 
       {/* Price Range */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Price</label>
+      <div className="flex flex-col">
+        <label className="text-xs font-semibold text-gray-600 mb-1">
+          Price
+        </label>
         <select className={dropdownClass}>
           <option>Low to High</option>
           <option>High to Low</option>
@@ -25,8 +30,10 @@ export default function Filters() {
       </div>
 
       {/* Brand Prestige */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Brand Prestige</label>
+      <div className="flex flex-col">
+        <label className="text-xs font-semibold text-gray-600 mb-1">
+          Brand Prestige
+        </label>
         <select className={dropdownClass}>
           <option>Any</option>
           <option>Premium</option>
@@ -35,8 +42,8 @@ export default function Filters() {
       </div>
 
       {/* Dietary Restrictions */}
-      <div>
-        <label className="block text-sm font-medium mb-1">
+      <div className="flex flex-col">
+        <label className="text-xs font-semibold text-gray-600 mb-1">
           Dietary Restrictions
         </label>
         <select className={dropdownClass}>
@@ -47,8 +54,8 @@ export default function Filters() {
       </div>
 
       {/* Ethical Restrictions */}
-      <div>
-        <label className="block text-sm font-medium mb-1">
+      <div className="flex flex-col">
+        <label className="text-xs font-semibold text-gray-600 mb-1">
           Ethical Restrictions
         </label>
         <select className={dropdownClass}>
@@ -59,8 +66,8 @@ export default function Filters() {
       </div>
 
       {/* Store Memberships */}
-      <div>
-        <label className="block text-sm font-medium mb-1">
+      <div className="flex flex-col">
+        <label className="text-xs font-semibold text-gray-600 mb-1">
           Store Memberships
         </label>
         <select className={dropdownClass}>
@@ -70,9 +77,11 @@ export default function Filters() {
         </select>
       </div>
 
-      {/* Max Stores to Visit */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Max Stores</label>
+      {/* Max Stores */}
+      <div className="flex flex-col">
+        <label className="text-xs font-semibold text-gray-600 mb-1">
+          Max Stores
+        </label>
         <select className={dropdownClass}>
           <option>1</option>
           <option>2</option>

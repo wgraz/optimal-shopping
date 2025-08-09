@@ -1,8 +1,11 @@
+import React from "react";
+
 interface ProductCardProps {
   image: string;
   name: string;
   store: string;
   price: string;
+  onViewDeal?: () => void;
 }
 
 export default function ProductCard({
@@ -10,22 +13,33 @@ export default function ProductCard({
   name,
   store,
   price,
+  onViewDeal,
 }: ProductCardProps) {
+  const storeColors: Record<string, string> = {
+    walmart: "text-blue-600",
+    target: "text-red-500",
+    costco: "text-red-600",
+    kroger: "text-blue-500",
+  };
+
+  const storeColorClass = storeColors[store.toLowerCase()] || "text-gray-600";
+
   return (
-    <div className="border rounded-2xl shadow-sm p-4 bg-white flex flex-col">
-      <img
-        src={image}
-        alt={name}
-        className="rounded-lg object-cover h-40 w-full"
-      />
-      <div className="mt-3">
-        <p className="text-lg font-semibold">{name}</p>
-        <p className="text-sm text-gray-600">{store}</p>
-        <p className="mt-1 text-green-600 font-bold">{price}</p>
+    <div className="border border-gray-200 rounded-2xl shadow-sm bg-white flex flex-col hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+      <img src={image} alt={name} className="h-44 w-full object-cover" />
+      <div className="flex flex-col flex-1 p-4">
+        <p className="text-base md:text-lg font-semibold leading-tight">
+          {name}
+        </p>
+        <p className={`text-sm mt-1 font-medium ${storeColorClass}`}>{store}</p>
+        <p className="mt-2 text-green-600 font-bold text-lg">{price}</p>
+        <button
+          onClick={onViewDeal}
+          className="mt-auto bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors duration-200"
+        >
+          View Deal
+        </button>
       </div>
-      <button className="mt-auto bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-lg text-sm">
-        View Deal
-      </button>
     </div>
   );
 }
